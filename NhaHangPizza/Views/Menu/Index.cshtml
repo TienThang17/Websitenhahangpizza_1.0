@@ -1,0 +1,117 @@
+@model NhaHangPizza.ViewModels.MenuViewModel
+@{
+    ViewBag.Title = "Menu Pizza";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-3 py-4">
+    <!-- Tiêu đề + bộ lọc -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <h2 class="page-title mb-0">🍕 Thực đơn Pizza</h2>
+            <small class="text-muted">Bàn số <strong>@Model.SoBan</strong></small>
+        </div>
+
+        <!-- Bộ lọc loại -->
+        <div class="filter-bar d-flex gap-2">
+            <a href="@Url.Action("Index", new { soBan = Model.SoBan, boLoc = "all" })"
+               class="btn btn-filter @(Model.BoLoc == "all" ? "active" : "")">
+                Tất cả
+            </a>
+            <a href="@Url.Action("Index", new { soBan = Model.SoBan, boLoc = "lam-san" })"
+               class="btn btn-filter @(Model.BoLoc == "lam-san" ? "active" : "")">
+                🧑‍🍳 Làm sẵn
+            </a>
+            <a href="@Url.Action("Index", new { soBan = Model.SoBan, boLoc = "tu-lam" })"
+               class="btn btn-filter @(Model.BoLoc == "tu-lam" ? "active" : "")">
+                ✨ Tự làm
+            </a>
+        </div>
+
+        <!-- Nút nước uống -->
+        <a href="@Url.Action("Index", "NuocUong")" class="btn btn-outline-info btn-lg">
+            <i class="bi bi-cup-straw me-1"></i>Chọn nước uống
+        </a>
+    </div>
+
+    <!-- Thông báo lỗi -->
+    @if (ViewBag.LoiMenu != null)
+    {
+        <div class="alert alert-danger d-flex align-items-center gap-3">
+            <i class="bi bi-exclamation-triangle-fill fs-4"></i>
+            <div>
+                <strong>@ViewBag.LoiMenu</strong>
+                <div class="mt-2">
+                    <a href="@Url.Action("Index", new { soBan = Model.SoBan })" class="btn btn-sm btn-danger">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Làm mới
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Lưới thẻ pizza -->
+    @if (Model.DanhSachPizza != null && Model.DanhSachPizza.Count > 0)
+    {
+        <div class="pizza-grid">
+            @foreach (var pizza in Model.DanhSachPizza)
+            {
+                <div class="pizza-card">
+                    <a href="@Url.Action("ChiTiet", "Menu", new { id = pizza.MaPizza })" class="pizza-card-link">
+                        <!-- Hình ảnh -->
+                        <div class="pizza-img-wrap">
+                            <img src="@(string.IsNullOrEmpty(pizza.HinhAnh) ? "/Content/images/placeholder.png" : pizza.HinhAnh)"
+                                 alt="@pizza.TenPizza"
+                                 class="pizza-img"
+                                 onerror="this.src='/Content/images/placeholder.png'" />
+                            <!-- Nhãn loại -->
+                            <span class="pizza-badge @(pizza.LoaiPizza == 2 ? "badge-tulam" : "badge-lamsan")">
+                                @pizza.TenLoai
+                            </span>
+                        </div>
+
+                        <div class="pizza-card-body">
+                            <h3 class="pizza-name">@pizza.TenPizza</h3>
+                            @if (!string.IsNullOrEmpty(pizza.MoTa))
+                            {
+                                <p class="pizza-mota">@pizza.MoTa</p>
+                            }
+                            <div class="d-flex align-items-center justify-content-between mt-auto">
+                                <span class="pizza-price">@pizza.DonGia.ToString("N0")đ</span>
+                                <span class="btn btn-pizza btn-sm">Chọn <i class="bi bi-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+    else if (ViewBag.LoiMenu == null)
+    {
+        <div class="text-center py-5">
+            <div class="fs-1">🍕</div>
+            <p class="text-muted mt-2">Không có pizza nào trong danh mục này.</p>
+        </div>
+    }
+
+    <!-- Nút đến giỏ hàng -->
+    @if (Model.SoMonTrongGio > 0)
+    {
+        <div class="sticky-bottom-bar d-flex justify-content-end">
+            <a href="@Url.Action("Index", "GioHang")" class="btn btn-pizza btn-lg px-5">
+                <i class="bi bi-cart3 me-2"></i>
+                Xem giỏ hàng (@Model.SoMonTrongGio món — @Model.TongTienGio.ToString("N0")đ)
+            </a>
+        </div>
+    }
+</div>
+
+@section scripts {
+    <script>
+        // Cập nhật số lượng giỏ hàng trên header từ server
+        (function () {
+            document.getElementById('cartCount').textContent = '@Model.SoMonTrongGio';
+            document.getElementById('cartPrice').textContent = '@Model.TongTienGio.ToString("N0")đ';
+        })();
+    </script>
+}

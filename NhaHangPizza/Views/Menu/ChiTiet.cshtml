@@ -1,0 +1,223 @@
+@model NhaHangPizza.ViewModels.TuyChinPizzaViewModel
+@{
+    ViewBag.Title = "Tùy chỉnh - " + Model.TenPizza;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var gioHangSvc = new NhaHangPizza.Services.GioHangService(Session);
+    int soBan = Model.SoBan;
+}
+
+<div class="container-fluid px-3 py-4">
+    <div class="row g-4">
+        <!-- CỘT TRÁI: Hình ảnh + tên -->
+        <div class="col-lg-4 col-md-5">
+            <div class="pizza-detail-img-wrap">
+                <img src="@(string.IsNullOrEmpty(Model.HinhAnh) ? "/Content/images/placeholder.png" : Model.HinhAnh)"
+                     alt="@Model.TenPizza"
+                     class="pizza-detail-img"
+                     onerror="this.src='/Content/images/placeholder.png'" />
+                <span class="pizza-badge @(Model.LoaiPizza == 2 ? "badge-tulam" : "badge-lamsan") position-absolute top-0 start-0 m-3">
+                    @(Model.LoaiPizza == 2 ? "Pizza tự làm" : "Pizza làm sẵn")
+                </span>
+            </div>
+            <h2 class="pizza-name mt-3">@Model.TenPizza</h2>
+            @if (!string.IsNullOrEmpty(Model.MoTa))
+            {
+                <p class="text-muted">@Model.MoTa</p>
+            }
+
+            <!-- Thành phần cố định (pizza làm sẵn) -->
+            @if (Model.LoaiPizza == 1 && Model.ThanhPhanCodinh.Count > 0)
+            {
+                <div class="ingredient-box readonly-box mt-3">
+                    <strong><i class="bi bi-list-check me-2"></i>Thành phần:</strong>
+                    <div class="mt-2 d-flex flex-wrap gap-1">
+                        @foreach (var tp in Model.ThanhPhanCodinh)
+                        {
+                            <span class="ingredient-tag">@tp</span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- CỘT PHẢI: Form tùy chỉnh -->
+        <div class="col-lg-8 col-md-7">
+            @using (Html.BeginForm("ThemPizza", "GioHang", FormMethod.Post, new { id = "formTuyChin" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("MaPizza", Model.MaPizza)
+                @Html.Hidden("TenPizza", Model.TenPizza)
+                @Html.Hidden("SoBan", soBan)
+
+                <!-- KÍCH THƯỚC -->
+                <div class="option-section mb-4">
+                    <h5 class="option-title"><i class="bi bi-arrows-angle-expand me-2"></i>Kích thước</h5>
+                    <div class="option-grid">
+                        @foreach (var kt in Model.DanhSachKichThuoc)
+                        {
+                            <label class="option-card @(kt.MaKichThuoc == Model.MaKichThuocChon ? "selected" : "")">
+                                <input type="radio" name="MaKichThuocChon" value="@kt.MaKichThuoc"
+                                       @(kt.MaKichThuoc == Model.MaKichThuocChon ? "checked" : "")
+                                       class="option-radio" data-hesoggia="@kt.HeSoGia.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)" />
+                                <span class="option-label">@kt.TenKichThuoc</span>
+                                <span class="option-sub">x@kt.HeSoGia.ToString("G")</span>
+                            </label>
+                        }
+                    </div>
+                </div>
+
+                <!-- VỎ BÁNH -->
+                <div class="option-section mb-4">
+                    <h5 class="option-title"><i class="bi bi-layers me-2"></i>Vỏ bánh</h5>
+                    <div class="option-grid">
+                        @foreach (var vb in Model.DanhSachVoBanh)
+                        {
+                            <label class="option-card @(vb.MaVoBanh == Model.MaVoBanhChon ? "selected" : "")">
+                                <input type="radio" name="MaVoBanhChon" value="@vb.MaVoBanh"
+                                       @(vb.MaVoBanh == Model.MaVoBanhChon ? "checked" : "")
+                                       class="option-radio" data-phuthu="@vb.PhuThu.ToString("F0")" />
+                                <span class="option-label">@vb.TenVoBanh</span>
+                                @if (vb.PhuThu > 0)
+                                {
+                                    <span class="option-sub">+@vb.PhuThu.ToString("N0")đ</span>
+                                }
+                            </label>
+                        }
+                    </div>
+                </div>
+
+                <!-- THÀNH PHẦN (chỉ pizza tự làm) -->
+                @if (Model.LoaiPizza == 2 && Model.DanhSachThanhPhan.Count > 0)
+                {
+                    <div class="option-section mb-4">
+                        <h5 class="option-title">
+                            <i class="bi bi-plus-circle me-2"></i>Chọn thành phần
+                            <small class="text-muted fw-normal ms-2">(Sốt cà chua đã có sẵn)</small>
+                        </h5>
+
+                        <!-- Sốt cà chua - mặc định, không bỏ được -->
+                        <div class="topping-item disabled mb-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" disabled checked id="sotCaChua" />
+                                <label class="form-check-label" for="sotCaChua">
+                                    🍅 Sốt cà chua <span class="text-success">(Có sẵn)</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="topping-grid">
+                            @foreach (var tp in Model.DanhSachThanhPhan)
+                            {
+                                bool het = tp.TrangThai == 0;
+                                <label class="topping-card @(het ? "het-hang" : "")">
+                                    <input type="checkbox" name="ThanhPhanChon" value="@tp.MaTP"
+                                           class="topping-cb"
+                                           data-gia="@tp.GiaTien"
+                                           @(het ? "disabled" : "") />
+                                    <span class="topping-name">@tp.TenTP</span>
+                                    <span class="topping-price">+@tp.GiaTien.ToString("N0")đ</span>
+                                    @if (het)
+                                    {
+                                        <span class="topping-het">Tạm hết</span>
+                                    }
+                                </label>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <!-- SỐ LƯỢNG + GHI CHÚ -->
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-4">
+                        <label class="form-label fw-semibold">Số lượng</label>
+                        <div class="qty-control">
+                            <button type="button" class="btn-qty" id="btnMinus">−</button>
+                            <input type="number" name="SoLuong" id="soLuong" value="1" min="1" max="20" class="qty-input" />
+                            <button type="button" class="btn-qty" id="btnPlus">+</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-8">
+                        <label class="form-label fw-semibold">Ghi chú</label>
+                        <input type="text" name="GhiChu" class="form-control form-control-lg"
+                               placeholder="VD: Ít cay, không hành..." maxlength="200" />
+                    </div>
+                </div>
+
+                <!-- TỔNG GIÁ + NÚT THÊM -->
+                <div class="price-bar d-flex align-items-center justify-content-between">
+                    <div>
+                        <span class="text-muted">Giá:</span>
+                        <span class="current-price" id="giaHienThi">@Model.DonGiaCoban.ToString("N0")đ</span>
+                        <input type="hidden" id="donGiaCoban" value="@Model.DonGiaCoban" />
+                        <input type="hidden" id="maPizza" value="@Model.MaPizza" />
+                    </div>
+                    <button type="submit" class="btn btn-pizza btn-lg px-5">
+                        <i class="bi bi-cart-plus me-2"></i>Thêm vào giỏ
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        // Tính giá real-time khi thay đổi lựa chọn
+        (function () {
+            var maPizza = parseInt(document.getElementById('maPizza').value);
+            var AJAX_URL = '@Url.Action("TinhGia", "Menu")';
+
+            function layGiaHienTai() {
+                var kt = document.querySelector('input[name="MaKichThuocChon"]:checked');
+                var vb = document.querySelector('input[name="MaVoBanhChon"]:checked');
+                var tps = document.querySelectorAll('.topping-cb:checked');
+
+                var maKT = kt ? parseInt(kt.value) : 0;
+                var maVB = vb ? parseInt(vb.value) : 0;
+                var maTPArr = Array.from(tps).map(function (c) { return parseInt(c.value); });
+
+                $.ajax({
+                    url: AJAX_URL,
+                    type: 'POST',
+                    data: {
+                        maPizza: maPizza,
+                        maKichThuoc: maKT,
+                        maVoBanh: maVB,
+                        maThanhPhan: maTPArr,
+                        __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (res) {
+                        if (res.thanhCong) {
+                            document.getElementById('giaHienThi').textContent = res.giaHienThi;
+                        }
+                    }
+                });
+            }
+
+            // Gán sự kiện cho radio và checkbox
+            document.querySelectorAll('.option-radio, .topping-cb').forEach(function (el) {
+                el.addEventListener('change', function () {
+                    document.querySelectorAll('.option-card').forEach(function (c) {
+                        c.classList.remove('selected');
+                    });
+                    if (this.classList.contains('option-radio')) {
+                        this.closest('.option-card').classList.add('selected');
+                    }
+                    layGiaHienTai();
+                });
+            });
+
+            // Nút +/-
+            document.getElementById('btnPlus').addEventListener('click', function () {
+                var input = document.getElementById('soLuong');
+                var v = parseInt(input.value) || 1;
+                if (v < 20) input.value = v + 1;
+            });
+            document.getElementById('btnMinus').addEventListener('click', function () {
+                var input = document.getElementById('soLuong');
+                var v = parseInt(input.value) || 1;
+                if (v > 1) input.value = v - 1;
+            });
+        })();
+    </script>
+}

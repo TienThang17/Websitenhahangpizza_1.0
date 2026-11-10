@@ -1,0 +1,50 @@
+@{
+    // Partial view: Thanh bước điều hướng (stepper)
+    string currentUrl = Request.Url?.AbsolutePath?.ToLower() ?? "";
+    int step = 1;
+    if (currentUrl.Contains("/menu/chitiet"))
+    {
+        step = 2;
+    }
+    else if (currentUrl.Contains("/nuocuong"))
+    {
+        step = 3;
+    }
+    else if (currentUrl.Contains("/giohang"))
+    {
+        step = 4;
+    }
+    else if (currentUrl.Contains("/donhang/theodoi"))
+    {
+        step = 5;
+    }
+    else if (currentUrl.Contains("/thanhtoan"))
+    {
+        step = 6;
+    }
+}
+
+<div class="stepper d-none d-lg-flex align-items-center justify-content-center gap-1">
+    @{
+        var steps = new[] {
+            new { Label = "Menu", Icon = "bi-grid" },
+            new { Label = "Chọn bánh", Icon = "bi-pizza" },
+            new { Label = "Nước uống", Icon = "bi-cup-straw" },
+            new { Label = "Giỏ hàng", Icon = "bi-cart3" },
+            new { Label = "Theo dõi", Icon = "bi-clock" },
+            new { Label = "Thanh toán", Icon = "bi-credit-card" }
+        };
+        for (int i = 0; i < steps.Length; i++)
+        {
+            string cls = i + 1 < step ? "done" : (i + 1 == step ? "active" : "");
+            <div class="stepper-item @cls">
+                <div class="stepper-dot"><i class="bi @steps[i].Icon"></i></div>
+                <span class="stepper-label">@steps[i].Label</span>
+            </div>
+            if (i < steps.Length - 1)
+            {
+                <div class="stepper-line @(i + 1 < step ? "done" : "")"></div>
+            }
+        }
+    }
+</div>

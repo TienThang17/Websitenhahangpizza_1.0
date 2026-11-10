@@ -1,0 +1,54 @@
+@{
+    ViewBag.Title = "Chọn bàn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model NhaHangPizza.Controllers.ChonBanViewModel
+
+<div class="chon-ban-page d-flex flex-column align-items-center justify-content-center min-vh-100 py-5">
+    <div class="text-center mb-5">
+        <div class="pizza-logo-big">🍕</div>
+        <h1 class="display-5 fw-bold pizza-title">Chào mừng đến Pizza House!</h1>
+        <p class="lead text-muted">Vui lòng chọn số bàn để bắt đầu</p>
+    </div>
+
+    @if (ViewBag.LoiBan != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show mb-4" style="max-width:500px;">
+            <i class="bi bi-exclamation-triangle me-2"></i>@ViewBag.LoiBan
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Lưới bàn -->
+    <div class="ban-grid mb-4">
+        @if (Model?.DanhSachBan != null)
+        {
+            foreach (var ban in Model.DanhSachBan)
+            {
+                string banClass = ban.TrangThaiBan == 0 ? "ban-trong" :
+                                  ban.TrangThaiBan == 1 ? "ban-dang-dung" : "ban-cho-tt";
+                string banLabel = ban.TrangThaiBan == 0 ? "Trống" :
+                                  ban.TrangThaiBan == 1 ? "Đang dùng" : "Chờ TT";
+                <a href="@Url.Action("Index", "Home", new { soBan = ban.SoBan })"
+                   class="ban-card @banClass @(ban.TrangThaiBan != 0 ? "disabled" : "")">
+                    <span class="ban-number">@ban.SoBan</span>
+                    <span class="ban-status">@banLabel</span>
+                </a>
+            }
+        }
+    </div>
+
+    <!-- Nhập thủ công -->
+    <div class="card shadow-sm" style="max-width:320px;width:100%;">
+        <div class="card-body">
+            <p class="text-center text-muted mb-3">Hoặc nhập số bàn thủ công:</p>
+            @using (Html.BeginForm("ChonBan", "Home", FormMethod.Post, new { @class = "d-flex gap-2" }))
+            {
+                @Html.AntiForgeryToken()
+                <input type="number" name="soBan" class="form-control form-control-lg"
+                       placeholder="Số bàn" min="1" max="99" required />
+                <button type="submit" class="btn btn-pizza btn-lg px-4">OK</button>
+            }
+        </div>
+    </div>
+</div>

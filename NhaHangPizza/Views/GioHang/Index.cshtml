@@ -1,0 +1,170 @@
+@model NhaHangPizza.ViewModels.GioHangViewModel
+@{
+    ViewBag.Title = "Giỏ hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-3 py-4">
+    <h2 class="page-title mb-4"><i class="bi bi-cart3 me-2"></i>Giỏ hàng — Bàn @Model.SoBan</h2>
+
+    @if (TempData["LoiGio"] != null)
+    {
+        <div class="alert alert-danger">
+            <i class="bi bi-x-circle me-2"></i>@TempData["LoiGio"]
+        </div>
+    }
+    @if (TempData["ThanhCong"] != null)
+    {
+        <div class="alert alert-success">
+            <i class="bi bi-check-circle me-2"></i>@TempData["ThanhCong"]
+        </div>
+    }
+
+    @if (Model.GioRong)
+    {
+        <div class="text-center py-5">
+            <div class="fs-1">🛒</div>
+            <h4 class="mt-3 text-muted">Giỏ hàng đang trống</h4>
+            <a href="@Url.Action("Index", "Menu")" class="btn btn-pizza btn-lg mt-3">
+                <i class="bi bi-arrow-left me-2"></i>Về menu
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            <!-- Danh sách món -->
+            <div class="col-lg-8">
+                <div class="cart-list" id="cartList">
+                    @foreach (var item in Model.DanhSachMon)
+                    {
+                        <div class="cart-item" id="item_@item.ItemKey">
+                            <div class="cart-item-info">
+                                <div class="d-flex align-items-start gap-3">
+                                    <span class="cart-icon">@(item.LaPizza ? "🍕" : "🥤")</span>
+                                    <div class="flex-grow-1">
+                                        <strong class="cart-name">@(item.TenPizza ?? item.TenNuoc)</strong>
+                                        @if (item.LaPizza)
+                                        {
+                                            <div class="cart-detail">
+                                                <span>@item.TenKichThuoc</span>
+                                                <span class="mx-1">·</span>
+                                                <span>@item.TenVoBanh</span>
+                                            </div>
+                                        }
+                                        @if (item.ThanhPhanDaChon != null && item.ThanhPhanDaChon.Count > 0)
+                                        {
+                                            <div class="cart-topping">
+                                                <i class="bi bi-plus-circle me-1"></i>
+                                                @string.Join(", ", item.ThanhPhanDaChon.Select(tp => tp.TenTP))
+                                            </div>
+                                        }
+                                        @if (!string.IsNullOrEmpty(item.GhiChu))
+                                        {
+                                            <div class="cart-note"><i class="bi bi-chat me-1"></i>@item.GhiChu</div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="cart-item-actions d-flex align-items-center gap-3">
+                                <!-- Điều chỉnh số lượng -->
+                                <div class="qty-control">
+                                    <button type="button" class="btn-qty"
+                                            onclick="capNhatSL('@item.ItemKey', @item.SoLuong - 1)">−</button>
+                                    <span class="qty-display" id="qty_@item.ItemKey">@item.SoLuong</span>
+                                    <button type="button" class="btn-qty"
+                                            onclick="capNhatSL('@item.ItemKey', @item.SoLuong + 1)">+</button>
+                                </div>
+
+                                <!-- Thành tiền -->
+                                <span class="cart-subtotal" id="tt_@item.ItemKey">
+                                    @item.ThanhTien.ToString("N0")đ
+                                </span>
+
+                                <!-- Xóa -->
+                                <button type="button" class="btn-remove"
+                                        onclick="xoaMon('@item.ItemKey')">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <!-- Nút tiếp tục mua -->
+                <div class="mt-3">
+                    <a href="@Url.Action("Index", "Menu")" class="btn btn-outline-secondary">
+                        <i class="bi bi-plus me-1"></i>Thêm món
+                    </a>
+                    <a href="@Url.Action("Index", "NuocUong")" class="btn btn-outline-info ms-2">
+                        <i class="bi bi-cup-straw me-1"></i>Thêm nước
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tóm tắt đơn hàng -->
+            <div class="col-lg-4">
+                <div class="order-summary-card">
+                    <h5 class="mb-3">📋 Tóm tắt đơn hàng</h5>
+                    <div class="summary-row">
+                        <span>Bàn số:</span>
+                        <strong>@Model.SoBan</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>Số món:</span>
+                        <strong id="summaryCount">@Model.DanhSachMon.Sum(i => i.SoLuong)</strong>
+                    </div>
+                    <hr />
+                    <div class="summary-total">
+                        <span>Tổng tiền:</span>
+                        <strong class="total-price" id="summaryTotal">@Model.TongTien.ToString("N0")đ</strong>
+                    </div>
+                    <small class="text-muted d-block mt-1">* Giá sẽ được tính lại khi xác nhận</small>
+
+                    @using (Html.BeginForm("XacNhan", "GioHang", FormMethod.Post, new { id = "formXacNhan" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-pizza btn-lg w-100 mt-3">
+                            <i class="bi bi-check2-circle me-2"></i>Xác nhận đặt bánh
+                        </button>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section scripts {
+    <script>
+        var capNhatSLUrl = '@Url.Action("CapNhatSoLuong", "GioHang")';
+        var xoaMonUrl = '@Url.Action("XoaMon", "GioHang")';
+
+        function capNhatSL(key, sl) {
+            $.post(capNhatSLUrl, { itemKey: key, soLuong: sl }, function (res) {
+                if (res.thanhCong) {
+                    document.getElementById('cartCount').textContent = res.soMon;
+                    document.getElementById('cartPrice').textContent = res.tongTien;
+                    if (sl <= 0) {
+                        document.getElementById('item_' + key)?.remove();
+                    } else {
+                        document.getElementById('qty_' + key).textContent = sl;
+                    }
+                    location.reload(); // Cập nhật tổng tiền
+                }
+            });
+        }
+
+        function xoaMon(key) {
+            if (!confirm('Bỏ món này khỏi giỏ?')) return;
+            $.post(xoaMonUrl, { itemKey: key }, function (res) {
+                if (res.thanhCong) {
+                    document.getElementById('item_' + key)?.remove();
+                    document.getElementById('cartCount').textContent = res.soMon;
+                    document.getElementById('cartPrice').textContent = res.tongTien;
+                    location.reload();
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,95 @@
+@model NhaHangPizza.ViewModels.TheoDoidonHangViewModel
+@{
+    ViewBag.Title = "Theo dõi đơn hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4">
+    <div class="text-center mb-4">
+        <h2 class="page-title">🍕 Đơn hàng #@Model.MaDonHang</h2>
+        <p class="text-muted">Bàn <strong>@Model.SoBan</strong> — Tổng tiền: <strong class="text-pizza">@Model.TongTien.ToString("N0")đ</strong></p>
+    </div>
+
+    <!-- Timeline các bước -->
+    <div class="timeline-wrap mb-5">
+        @foreach (var buoc in Model.DanhSachBuoc)
+        {
+            string cls = buoc.DaHoanThanh ? "done" : (buoc.DangLam ? "active" : "pending");
+            string icon = buoc.DaHoanThanh ? "bi-check-circle-fill" : (buoc.DangLam ? "bi-clock-fill" : "bi-circle");
+            <div class="timeline-item @cls" id="buoc_@buoc.MaBuoc">
+                <div class="timeline-dot">
+                    <i class="bi @icon"></i>
+                </div>
+                <div class="timeline-content">
+                    <span class="timeline-label">@buoc.TenBuoc</span>
+                    @if (buoc.DangLam)
+                    {
+                        <span class="timeline-status">Đang làm...</span>
+                    }
+                    else if (buoc.DaHoanThanh)
+                    {
+                        <span class="timeline-status done-text">Hoàn thành ✓</span>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Trạng thái hoàn thành -->
+    @if (Model.DaHoanThanh)
+    {
+        <div class="alert alert-success text-center py-4">
+            <div class="fs-1">🎉</div>
+            <h4 class="mt-2">Bánh đã sẵn sàng!</h4>
+            <p class="mb-3">Thưởng thức bữa ăn ngon miệng nhé!</p>
+            <a href="@Url.Action("Index", "ThanhToan", new { maDonHang = Model.MaDonHang })"
+               class="btn btn-pizza btn-lg px-5">
+                <i class="bi bi-credit-card me-2"></i>Thanh toán ngay
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="text-center text-muted">
+            <div class="spinner-pizza mb-2">
+                <i class="bi bi-arrow-repeat spinning fs-2 text-pizza"></i>
+            </div>
+            <p>Đang cập nhật tự động mỗi 4 giây...</p>
+        </div>
+    }
+
+    <div class="text-center mt-4">
+        <a href="@Url.Action("Index", "Menu")" class="btn btn-outline-secondary me-2">
+            <i class="bi bi-arrow-left me-1"></i>Menu
+        </a>
+        @if (Model.ChoThanhToan)
+        {
+            <a href="@Url.Action("Index", "ThanhToan", new { maDonHang = Model.MaDonHang })"
+               class="btn btn-pizza">
+                Thanh toán
+            </a>
+        }
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        (function () {
+            var maDonHang = @Model.MaDonHang;
+            var doneState = @(Model.DaHoanThanh ? "true" : "false");
+            var statusUrl = '@Url.Action("LayTrangThai", "DonHang")';
+
+            if (!doneState) {
+                // Polling mỗi 4 giây
+                var interval = setInterval(function () {
+                    $.get(statusUrl, { maDonHang: maDonHang }, function (res) {
+                        if (res.thanhCong && res.trangThaiDon !== undefined) {
+                            // Reload để cập nhật timeline
+                            location.reload();
+                        }
+                    });
+                }, 4000);
+            }
+        })();
+    </script>
+}

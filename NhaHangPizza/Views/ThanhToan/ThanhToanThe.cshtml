@@ -1,0 +1,118 @@
+@model NhaHangPizza.ViewModels.ThanhToanTheViewModel
+@{
+    ViewBag.Title = "Thanh toán thẻ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4" style="max-width:520px;">
+    <div class="card shadow-sm">
+        <div class="card-header bg-pizza text-white text-center py-3">
+            <h4 class="mb-0"><i class="bi bi-credit-card me-2"></i>Thanh toán thẻ tín dụng</h4>
+            <div class="mt-1 fs-5">@Model.TongTien.ToString("N0")đ</div>
+        </div>
+        <div class="card-body p-4">
+            @if (TempData["LoiThanhToan"] != null)
+            {
+                <div class="alert alert-danger">
+                    <i class="bi bi-x-circle me-2"></i>@TempData["LoiThanhToan"]
+                </div>
+            }
+
+            @using (Html.BeginForm("ThanhToanThe", "ThanhToan", FormMethod.Post, new { id = "formThe", autocomplete = "off" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.MaDonHang)
+                @Html.HiddenFor(m => m.SoBan)
+                @Html.HiddenFor(m => m.TongTien)
+
+                <!-- Số thẻ -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Số thẻ</label>
+                    @Html.TextBoxFor(m => m.SoThe, new {
+                        @class = "form-control form-control-lg",
+                        placeholder = "1234 5678 9012 3456",
+                        maxlength = "19",
+                        inputmode = "numeric",
+                        autocomplete = "cc-number"
+                    })
+                    @Html.ValidationMessageFor(m => m.SoThe, "", new { @class = "text-danger small" })
+                </div>
+
+                <!-- Tên chủ thẻ -->
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Tên chủ thẻ</label>
+                    @Html.TextBoxFor(m => m.TenChuThe, new {
+                        @class = "form-control form-control-lg",
+                        placeholder = "NGUYEN VAN A",
+                        style = "text-transform:uppercase",
+                        autocomplete = "cc-name"
+                    })
+                    @Html.ValidationMessageFor(m => m.TenChuThe, "", new { @class = "text-danger small" })
+                </div>
+
+                <!-- Ngày hết hạn + CVV -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <label class="form-label fw-semibold">Ngày hết hạn</label>
+                        @Html.TextBoxFor(m => m.NgayHetHan, new {
+                            @class = "form-control form-control-lg",
+                            placeholder = "MM/YY",
+                            maxlength = "5",
+                            inputmode = "numeric",
+                            autocomplete = "cc-exp"
+                        })
+                        @Html.ValidationMessageFor(m => m.NgayHetHan, "", new { @class = "text-danger small" })
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label fw-semibold">CVV</label>
+                        @Html.TextBoxFor(m => m.CVV, new {
+                            @class = "form-control form-control-lg",
+                            placeholder = "***",
+                            maxlength = "4",
+                            inputmode = "numeric",
+                            type = "password",
+                            autocomplete = "cc-csc"
+                        })
+                        @Html.ValidationMessageFor(m => m.CVV, "", new { @class = "text-danger small" })
+                    </div>
+                </div>
+
+                <div class="alert alert-secondary small">
+                    <i class="bi bi-shield-lock me-2"></i>
+                    Thông tin thẻ được mã hóa an toàn. CVV không được lưu lại.
+                </div>
+
+                <div class="d-flex gap-3">
+                    <a href="@Url.Action("Index", "ThanhToan", new { maDonHang = Model.MaDonHang })"
+                       class="btn btn-outline-secondary btn-lg flex-grow-1">Quay lại</a>
+                    <button type="submit" class="btn btn-pizza btn-lg flex-grow-1" id="btnThanhToan">
+                        <i class="bi bi-lock me-2"></i>Thanh toán
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        // Định dạng số thẻ tự động (nhóm 4 chữ số)
+        document.querySelector('input[name="SoThe"]').addEventListener('input', function () {
+            var v = this.value.replace(/\D/g, '').substring(0, 16);
+            this.value = v.match(/.{1,4}/g)?.join(' ') || v;
+        });
+        // Định dạng MM/YY
+        document.querySelector('input[name="NgayHetHan"]').addEventListener('input', function () {
+            var v = this.value.replace(/\D/g, '');
+            if (v.length >= 2) v = v.substring(0, 2) + '/' + v.substring(2, 4);
+            this.value = v;
+        });
+        // Hiệu ứng loading khi submit
+        document.getElementById('formThe').addEventListener('submit', function () {
+            var btn = document.getElementById('btnThanhToan');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Đang xử lý...';
+        });
+    </script>
+}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a2ead60b534247ad8afcaa7f1a3c07b1" Name="Diagram1">
+        <EntityTypeShape EntityType="PizzaDBModel.BanAn" Width="1.5" PointX="1.5" PointY="14.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.BuocLamBanh" Width="1.5" PointX="1.5" PointY="17" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.ChiTietDonHang" Width="1.5" PointX="3" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.ChiTietTuLam_ThanhPhan" Width="1.5" PointX="7.5" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.CongThanhToan" Width="1.5" PointX="3" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.DonHang" Width="1.5" PointX="0.75" PointY="10.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.KichThuoc" Width="1.5" PointX="0.75" PointY="19.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.NuocUong" Width="1.5" PointX="0.75" PointY="22.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.Pizza" Width="1.5" PointX="0.75" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.PizzaLamSan" Width="1.5" PointX="3" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.PizzaTuLam" Width="1.5" PointX="3" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.ThanhPhan" Width="1.5" PointX="5.25" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.ThanhToan" Width="1.5" PointX="3" PointY="20.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.ThanhToanThe" Width="1.5" PointX="5.25" PointY="20.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.ThanhToanTienMat" Width="1.5" PointX="5.25" PointY="24.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PizzaDBModel.VoBanh" Width="1.5" PointX="0.75" PointY="25" IsExpanded="true" />
+        <AssociationConnector Association="PizzaDBModel.FK_DonHang_BanAn" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.FK_DonHang_Buoc" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.FK_CTDH_DonHang" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.FK_CTDH_KichThuoc" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.FK_CTDH_NuocUong" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.FK_CTDH_Pizza" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.FK_CTDH_VoBanh" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.FK_CTTL_ChiTiet" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.FK_CTTL_ThanhPhan" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.FK_TTThe_Cong" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.FK_ThanhToan_DonHang" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.FK_PizzaLamSan_Pizza" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.FK_PizzaTuLam_Pizza" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.FK_TTThe_ThanhToan" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.FK_TTTM_ThanhToan" ManuallyRouted="false" />
+        <AssociationConnector Association="PizzaDBModel.ThanhPhanPizzaLamSan" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

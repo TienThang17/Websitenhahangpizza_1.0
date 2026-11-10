@@ -1,0 +1,59 @@
+@model NhaHangPizza.ViewModels.KetQuaThanhToanViewModel
+@{
+    ViewBag.Title = Model.ThanhCong ? "Thanh toán thành công" : "Thanh toán thất bại";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container text-center py-5">
+    @if (Model.ThanhCong)
+    {
+        <div class="display-1 mb-3">🎉</div>
+        <h2 class="text-success page-title">Thanh toán thành công!</h2>
+        <p class="lead mb-2">Cảm ơn bạn đã sử dụng dịch vụ của <strong>Pizza House</strong>!</p>
+
+        <div class="card mx-auto shadow-sm mb-4" style="max-width:420px;">
+            <div class="card-body py-4">
+                <div class="row g-2 text-start">
+                    <div class="col-6 text-muted">Bàn số:</div>
+                    <div class="col-6"><strong>@Model.SoBan</strong></div>
+                    <div class="col-6 text-muted">Đơn hàng:</div>
+                    <div class="col-6"><strong>#@Model.MaDonHang</strong></div>
+                    <div class="col-6 text-muted">Tổng tiền:</div>
+                    <div class="col-6"><strong class="text-pizza">@Model.TongTien.ToString("N0")đ</strong></div>
+                    @if (Model.PhuongThuc == 1 && Model.TienThua.HasValue)
+                    {
+                        <div class="col-6 text-muted">Tiền thừa:</div>
+                        <div class="col-6"><strong class="text-success">@Model.TienThua.Value.ToString("N0")đ</strong></div>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.MaGiaoDich))
+                    {
+                        <div class="col-6 text-muted">Mã GD:</div>
+                        <div class="col-6"><small><code>@Model.MaGiaoDich</code></small></div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <p class="text-muted">Chúc quý khách ngon miệng! 🍕</p>
+        <a href="@Url.Action("Index", "Home")" class="btn btn-pizza btn-lg mt-2">
+            <i class="bi bi-house me-2"></i>Bàn mới
+        </a>
+    }
+    else
+    {
+        <div class="display-1 mb-3">😞</div>
+        <h2 class="text-danger page-title">Thanh toán thất bại</h2>
+        <p class="lead mb-4">@Model.ThongBao</p>
+
+        <div class="d-flex justify-content-center gap-3">
+            <a href="@Url.Action("ThanhToanThe", "ThanhToan", new { maDonHang = Model.MaDonHang })"
+               class="btn btn-pizza btn-lg">
+                <i class="bi bi-credit-card me-2"></i>Thử lại thẻ khác
+            </a>
+            <a href="@Url.Action("Index", "ThanhToan", new { maDonHang = Model.MaDonHang })"
+               class="btn btn-outline-secondary btn-lg">
+                Thanh toán tiền mặt
+            </a>
+        </div>
+    }
+</div>

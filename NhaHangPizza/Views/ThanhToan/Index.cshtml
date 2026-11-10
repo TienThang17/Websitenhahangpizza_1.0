@@ -1,0 +1,125 @@
+@model NhaHangPizza.ViewModels.ThanhToanViewModel
+@{
+    ViewBag.Title = "Thanh toán";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-4" style="max-width:800px;">
+    <h2 class="page-title text-center mb-4"><i class="bi bi-receipt me-2"></i>Hóa đơn thanh toán</h2>
+
+    <!-- Chi tiết hóa đơn -->
+    <div class="invoice-card mb-4">
+        <div class="invoice-header">
+            <div>
+                <strong>Bàn số @Model.SoBan</strong><br />
+                <small class="text-muted">Đơn #@Model.MaDonHang · @Model.NgayTao.ToString("dd/MM/yyyy HH:mm")</small>
+            </div>
+        </div>
+
+        <table class="table invoice-table mb-0">
+            <thead>
+                <tr>
+                    <th>Món</th>
+                    <th class="text-center">SL</th>
+                    <th class="text-end">Đơn giá</th>
+                    <th class="text-end">Thành tiền</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ChiTietHoaDon)
+                {
+                    <tr>
+                        <td>
+                            <strong>@item.TenMon</strong>
+                            @if (!string.IsNullOrEmpty(item.MoTa))
+                            {
+                                <br /><small class="text-muted">@item.MoTa</small>
+                            }
+                        </td>
+                        <td class="text-center">@item.SoLuong</td>
+                        <td class="text-end">@item.DonGia.ToString("N0")đ</td>
+                        <td class="text-end fw-semibold">@item.ThanhTien.ToString("N0")đ</td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr class="invoice-total">
+                    <td colspan="3" class="text-end fw-bold">TỔNG TIỀN:</td>
+                    <td class="text-end fw-bold text-pizza fs-5">@Model.TongTien.ToString("N0")đ</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <!-- Chọn phương thức thanh toán -->
+    <div class="payment-method-card">
+        <h5 class="mb-4 text-center">Chọn phương thức thanh toán</h5>
+        <div class="row g-3">
+            <!-- Tiền mặt -->
+            <div class="col-md-6">
+                <div class="payment-option" onclick="chonPhuongThuc(1)">
+                    <div class="payment-icon">💵</div>
+                    <div class="payment-name">Tiền mặt</div>
+                    <small class="text-muted">Nhân viên sẽ đến thu tiền</small>
+                </div>
+            </div>
+            <!-- Thẻ tín dụng -->
+            <div class="col-md-6">
+                <div class="payment-option" onclick="chonPhuongThuc(2)">
+                    <div class="payment-icon">💳</div>
+                    <div class="payment-name">Thẻ tín dụng</div>
+                    <small class="text-muted">Thanh toán qua cổng bảo mật</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Form tiền mặt -->
+        <div id="formTienMat" class="mt-4 d-none">
+            @using (Html.BeginForm("YeuCauTienMat", "ThanhToan", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="maDonHang" value="@Model.MaDonHang" />
+                <div class="alert alert-info d-flex gap-3 align-items-center">
+                    <i class="bi bi-info-circle-fill fs-4"></i>
+                    <div>Nhân viên sẽ đến bàn @Model.SoBan để thu tiền. Nhấn xác nhận để gọi nhân viên.</div>
+                </div>
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-outline-secondary" onclick="chonPhuongThuc(0)">Huỷ</button>
+                    <button type="submit" class="btn btn-pizza btn-lg px-5">
+                        <i class="bi bi-bell me-2"></i>Gọi nhân viên thu tiền
+                    </button>
+                </div>
+            }
+        </div>
+
+        <!-- Nút đến form thẻ -->
+        <div id="formThe" class="mt-4 d-none">
+            <div class="d-flex justify-content-end gap-2">
+                <button type="button" class="btn btn-outline-secondary" onclick="chonPhuongThuc(0)">Huỷ</button>
+                <a href="@Url.Action("ThanhToanThe", new { maDonHang = Model.MaDonHang })"
+                   class="btn btn-pizza btn-lg px-5">
+                    <i class="bi bi-credit-card me-2"></i>Nhập thông tin thẻ
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        function chonPhuongThuc(pt) {
+            document.getElementById('formTienMat').classList.add('d-none');
+            document.getElementById('formThe').classList.add('d-none');
+            document.querySelectorAll('.payment-option').forEach(function (el) {
+                el.classList.remove('selected');
+            });
+            if (pt === 1) {
+                document.getElementById('formTienMat').classList.remove('d-none');
+                document.querySelectorAll('.payment-option')[0].classList.add('selected');
+            } else if (pt === 2) {
+                document.getElementById('formThe').classList.remove('d-none');
+                document.querySelectorAll('.payment-option')[1].classList.add('selected');
+            }
+        }
+    </script>
+}

@@ -1,0 +1,112 @@
+@model NhaHangPizza.ViewModels.NuocUongViewModel
+@{
+    ViewBag.Title = "Chọn nước uống";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-3 py-4">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <h2 class="page-title mb-0"><i class="bi bi-cup-straw me-2"></i>Chọn nước uống</h2>
+            <small class="text-muted">Áp dụng cho mọi cỡ bánh. Bạn có thể bỏ qua bước này.</small>
+        </div>
+        <a href="@Url.Action("Index", "GioHang")" class="btn btn-outline-secondary btn-lg">
+            Bỏ qua → Giỏ hàng
+        </a>
+    </div>
+
+    <!-- Thông báo kết quả AJAX -->
+    <div id="toastNuoc" class="toast-custom d-none"></div>
+
+    <!-- Danh sách nước uống -->
+    <div class="nuoc-grid">
+        @foreach (var nuoc in Model.DanhSachNuoc)
+        {
+            <div class="nuoc-card @(!nuoc.ConHang ? "het-hang" : "")">
+                <div class="nuoc-img-wrap">
+                    <img src="@(string.IsNullOrEmpty(nuoc.HinhAnh) ? "/Content/images/placeholder_drink.png" : nuoc.HinhAnh)"
+                         alt="@nuoc.TenNuoc"
+                         class="nuoc-img"
+                         onerror="this.src='/Content/images/placeholder_drink.png'" />
+                    @if (!nuoc.ConHang)
+                    {
+                        <div class="het-overlay">HẾT HÀNG</div>
+                    }
+                </div>
+                <div class="nuoc-body">
+                    <h4 class="nuoc-name">@nuoc.TenNuoc</h4>
+                    <span class="nuoc-price">@nuoc.DonGia.ToString("N0")đ</span>
+                    @if (nuoc.ConHang)
+                    {
+                        <small class="text-muted d-block">Còn @nuoc.SoLuongTon ly</small>
+                        <!-- Điều chỉnh số lượng -->
+                        <div class="qty-control mt-2">
+                            <button type="button" class="btn-qty" onclick="thayDoiSL(@nuoc.MaNuoc, -1)">−</button>
+                            <input type="number" id="sl_@nuoc.MaNuoc" value="1" min="1" max="@nuoc.SoLuongTon" class="qty-input" />
+                            <button type="button" class="btn-qty" onclick="thayDoiSL(@nuoc.MaNuoc, 1)">+</button>
+                        </div>
+                        <button type="button" class="btn btn-pizza w-100 mt-2"
+                                onclick="themNuoc(@nuoc.MaNuoc, @nuoc.SoLuongTon)">
+                            <i class="bi bi-plus-circle me-1"></i>Thêm
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-secondary w-100 mt-2" disabled>Hết hàng</button>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Nút đến giỏ hàng -->
+    <div class="sticky-bottom-bar d-flex justify-content-end gap-3 mt-4">
+        <a href="@Url.Action("Index", "Menu")" class="btn btn-outline-secondary btn-lg">
+            <i class="bi bi-arrow-left me-2"></i>Menu
+        </a>
+        <a href="@Url.Action("Index", "GioHang")" class="btn btn-pizza btn-lg px-5">
+            <i class="bi bi-cart3 me-2"></i>Xem giỏ hàng
+        </a>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        var addToCartUrl = '@Url.Action("ThemNuoc", "GioHang")';
+
+        function thayDoiSL(maNuoc, delta) {
+            var input = document.getElementById('sl_' + maNuoc);
+            var v = parseInt(input.value) || 1;
+            var max = parseInt(input.max);
+            v += delta;
+            if (v < 1) v = 1;
+            if (v > max) v = max;
+            input.value = v;
+        }
+
+        function themNuoc(maNuoc, soLuongTon) {
+            var soLuong = parseInt(document.getElementById('sl_' + maNuoc).value);
+            if (soLuong > soLuongTon) {
+                hienToast('Chỉ còn ' + soLuongTon + ' ly!', 'warning');
+                return;
+            }
+            $.post(addToCartUrl, { maNuoc: maNuoc, soLuong: soLuong }, function (res) {
+                if (res.thanhCong) {
+                    document.getElementById('cartCount').textContent = res.soMon;
+                    document.getElementById('cartPrice').textContent = res.tongTien;
+                    hienToast(res.thongBao, 'success');
+                } else {
+                    hienToast(res.loi, 'danger');
+                }
+            });
+        }
+
+        function hienToast(msg, type) {
+            var t = document.getElementById('toastNuoc');
+            t.textContent = msg;
+            t.className = 'toast-custom alert alert-' + type;
+            t.classList.remove('d-none');
+            setTimeout(function () { t.classList.add('d-none'); }, 2500);
+        }
+    </script>
+}

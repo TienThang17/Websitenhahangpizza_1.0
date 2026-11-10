@@ -1,0 +1,101 @@
+@model NhaHangPizza.ViewModels.BepViewModel
+@{
+    ViewBag.Title = "Quản lý bếp";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid px-3 py-4">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h2 class="page-title mb-0">🧑‍🍳 Quản lý bếp</h2>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("ThuNgan", "ThanhToan")" class="btn btn-outline-info">
+                <i class="bi bi-cash-stack me-1"></i>Thu ngân
+            </a>
+            <button class="btn btn-outline-secondary" onclick="location.reload()">
+                <i class="bi bi-arrow-clockwise me-1"></i>Làm mới
+            </button>
+        </div>
+    </div>
+
+    @if (Model.DanhSachDon.Count == 0)
+    {
+        <div class="text-center py-5 text-muted">
+            <div class="fs-1">✅</div>
+            <h4 class="mt-2">Không có đơn hàng nào đang chờ</h4>
+        </div>
+    }
+
+    <div class="bep-grid">
+        @foreach (var don in Model.DanhSachDon)
+        {
+            int maxBuoc = 6;
+            string cardColor = don.TrangThaiDon == 0 ? "border-danger" :
+                               don.TrangThaiDon >= maxBuoc ? "border-success" : "border-warning";
+            <div class="bep-card @cardColor">
+                <div class="bep-card-header d-flex justify-content-between align-items-start">
+                    <div>
+                        <h5 class="mb-0">Đơn #@don.MaDonHang</h5>
+                        <small class="text-muted">Bàn <strong>@don.SoBan</strong> · @don.NgayTao.ToString("HH:mm")</small>
+                    </div>
+                    <span class="badge @(don.TrangThaiDon == 0 ? "bg-danger" : don.TrangThaiDon >= maxBuoc ? "bg-success" : "bg-warning text-dark")">
+                        @(don.TrangThaiDon == 0 ? "Mới" : don.TrangThaiDon >= maxBuoc ? "Xong" : $"Bước {don.TrangThaiDon}")
+                    </span>
+                </div>
+
+                <!-- Danh sách món -->
+                <ul class="bep-mon-list mt-2">
+                    @foreach (var mon in don.TomTatMon)
+                    {
+                        <li>@mon</li>
+                    }
+                </ul>
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <strong class="text-pizza">@don.TongTien.ToString("N0")đ</strong>
+                    @if (don.TrangThaiDon < maxBuoc)
+                    {
+                        <button type="button" class="btn btn-pizza btn-sm"
+                                onclick="chuyenBuoc(@don.MaDonHang, this)">
+                            <i class="bi bi-arrow-right me-1"></i>Bước tiếp
+                        </button>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("ThuNgan", "ThanhToan")" class="btn btn-success btn-sm">
+                            <i class="bi bi-cash me-1"></i>Thu tiền
+                        </a>
+                    }
+                </div>
+
+                <!-- Mini timeline -->
+                <div class="mini-timeline mt-3">
+                    @for (int i = 1; i <= maxBuoc; i++)
+                    {
+                        <div class="mini-step @(don.TrangThaiDon > i ? "done" : (don.TrangThaiDon == i ? "active" : ""))">@i</div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        var chuyenBuocUrl = '@Url.Action("ChuyenBuoc", "DonHang")';
+
+        function chuyenBuoc(maDonHang, btn) {
+            btn.disabled = true;
+            $.post(chuyenBuocUrl, { maDonHang: maDonHang }, function (res) {
+                if (res.thanhCong) {
+                    setTimeout(function () { location.reload(); }, 500);
+                } else {
+                    alert('Lỗi: ' + res.loi);
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        // Tự động làm mới trang bếp mỗi 10 giây
+        setInterval(function () { location.reload(); }, 10000);
+    </script>
+}

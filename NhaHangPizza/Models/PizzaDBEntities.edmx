@@ -1,0 +1,1135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PizzaDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BanAn">
+          <Key>
+            <PropertyRef Name="SoBan" />
+          </Key>
+          <Property Name="SoBan" Type="int" Nullable="false" />
+          <Property Name="TrangThaiBan" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BuocLamBanh">
+          <Key>
+            <PropertyRef Name="MaBuoc" />
+          </Key>
+          <Property Name="MaBuoc" Type="int" Nullable="false" />
+          <Property Name="TenBuoc" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ThuTu" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ChiTietDonHang">
+          <Key>
+            <PropertyRef Name="MaChiTiet" />
+          </Key>
+          <Property Name="MaChiTiet" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaDonHang" Type="int" Nullable="false" />
+          <Property Name="MaPizza" Type="int" />
+          <Property Name="MaNuoc" Type="int" />
+          <Property Name="MaKichThuoc" Type="int" />
+          <Property Name="MaVoBanh" Type="int" />
+          <Property Name="SoLuong" Type="int" Nullable="false" />
+          <Property Name="DonGia" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="ThanhTien" Type="decimal" Precision="29" Scale="0" StoreGeneratedPattern="Computed" />
+          <Property Name="GhiChu" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="ChiTietTuLam_ThanhPhan">
+          <Key>
+            <PropertyRef Name="MaChiTiet" />
+            <PropertyRef Name="MaTP" />
+          </Key>
+          <Property Name="MaChiTiet" Type="int" Nullable="false" />
+          <Property Name="MaTP" Type="int" Nullable="false" />
+          <Property Name="GiaTien" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CongThanhToan">
+          <Key>
+            <PropertyRef Name="MaCong" />
+          </Key>
+          <Property Name="MaCong" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TenCong" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="GatewayURL" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="APIKey" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="DonHang">
+          <Key>
+            <PropertyRef Name="MaDonHang" />
+          </Key>
+          <Property Name="MaDonHang" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SoBan" Type="int" Nullable="false" />
+          <Property Name="NgayTao" Type="datetime" Nullable="false" />
+          <Property Name="TongTien" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="TrangThaiDon" Type="int" Nullable="false" />
+          <Property Name="TrangThaiThanhToan" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="KichThuoc">
+          <Key>
+            <PropertyRef Name="MaKichThuoc" />
+          </Key>
+          <Property Name="MaKichThuoc" Type="int" Nullable="false" />
+          <Property Name="TenKichThuoc" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="HeSoGia" Type="decimal" Precision="4" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="NuocUong">
+          <Key>
+            <PropertyRef Name="MaNuoc" />
+          </Key>
+          <Property Name="MaNuoc" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TenNuoc" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="DonGia" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="SoLuongTon" Type="int" Nullable="false" />
+          <Property Name="HinhAnh" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Pizza">
+          <Key>
+            <PropertyRef Name="MaPizza" />
+          </Key>
+          <Property Name="MaPizza" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TenPizza" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="LoaiPizza" Type="int" Nullable="false" />
+          <Property Name="DonGia" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="HinhAnh" Type="nvarchar" MaxLength="255" />
+          <Property Name="TrangThai" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PizzaLamSan">
+          <Key>
+            <PropertyRef Name="MaPizza" />
+          </Key>
+          <Property Name="MaPizza" Type="int" Nullable="false" />
+          <Property Name="MoTa" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="PizzaTuLam">
+          <Key>
+            <PropertyRef Name="MaPizza" />
+          </Key>
+          <Property Name="MaPizza" Type="int" Nullable="false" />
+          <Property Name="CoSotCaChua" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ThanhPhan">
+          <Key>
+            <PropertyRef Name="MaTP" />
+          </Key>
+          <Property Name="MaTP" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TenTP" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="GiaTien" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="TrangThai" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ThanhPhanPizzaLamSan">
+          <Key>
+            <PropertyRef Name="MaPizza" />
+            <PropertyRef Name="MaTP" />
+          </Key>
+          <Property Name="MaPizza" Type="int" Nullable="false" />
+          <Property Name="MaTP" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ThanhToan">
+          <Key>
+            <PropertyRef Name="MaThanhToan" />
+          </Key>
+          <Property Name="MaThanhToan" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaDonHang" Type="int" Nullable="false" />
+          <Property Name="PhuongThuc" Type="int" Nullable="false" />
+          <Property Name="SoTien" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="NgayThanhToan" Type="datetime" />
+          <Property Name="TrangThai" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ThanhToanThe">
+          <Key>
+            <PropertyRef Name="MaThanhToan" />
+          </Key>
+          <Property Name="MaThanhToan" Type="int" Nullable="false" />
+          <Property Name="MaCong" Type="int" />
+          <Property Name="SoThe" Type="char" MaxLength="20" Nullable="false" />
+          <Property Name="TenChuThe" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="NgayHetHan" Type="date" Nullable="false" />
+          <Property Name="MaGiaoDich" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="ThanhToanTienMat">
+          <Key>
+            <PropertyRef Name="MaThanhToan" />
+          </Key>
+          <Property Name="MaThanhToan" Type="int" Nullable="false" />
+          <Property Name="TienKhachDua" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="TienThua" Type="decimal" Precision="18" Scale="0" />
+        </EntityType>
+        <EntityType Name="VoBanh">
+          <Key>
+            <PropertyRef Name="MaVoBanh" />
+          </Key>
+          <Property Name="MaVoBanh" Type="int" Nullable="false" />
+          <Property Name="TenVoBanh" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="PhuThu" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_CTDH_DonHang">
+          <End Role="DonHang" Type="Self.DonHang" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonHang">
+              <PropertyRef Name="MaDonHang" />
+            </Principal>
+            <Dependent Role="ChiTietDonHang">
+              <PropertyRef Name="MaDonHang" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTDH_KichThuoc">
+          <End Role="KichThuoc" Type="Self.KichThuoc" Multiplicity="0..1" />
+          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KichThuoc">
+              <PropertyRef Name="MaKichThuoc" />
+            </Principal>
+            <Dependent Role="ChiTietDonHang">
+              <PropertyRef Name="MaKichThuoc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTDH_NuocUong">
+          <End Role="NuocUong" Type="Self.NuocUong" Multiplicity="0..1" />
+          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NuocUong">
+              <PropertyRef Name="MaNuoc" />
+            </Principal>
+            <Dependent Role="ChiTietDonHang">
+              <PropertyRef Name="MaNuoc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTDH_Pizza">
+          <End Role="Pizza" Type="Self.Pizza" Multiplicity="0..1" />
+          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pizza">
+              <PropertyRef Name="MaPizza" />
+            </Principal>
+            <Dependent Role="ChiTietDonHang">
+              <PropertyRef Name="MaPizza" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTDH_VoBanh">
+          <End Role="VoBanh" Type="Self.VoBanh" Multiplicity="0..1" />
+          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VoBanh">
+              <PropertyRef Name="MaVoBanh" />
+            </Principal>
+            <Dependent Role="ChiTietDonHang">
+              <PropertyRef Name="MaVoBanh" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTTL_ChiTiet">
+          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ChiTietTuLam_ThanhPhan" Type="Self.ChiTietTuLam_ThanhPhan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ChiTietDonHang">
+              <PropertyRef Name="MaChiTiet" />
+            </Principal>
+            <Dependent Role="ChiTietTuLam_ThanhPhan">
+              <PropertyRef Name="MaChiTiet" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTTL_ThanhPhan">
+          <End Role="ThanhPhan" Type="Self.ThanhPhan" Multiplicity="1" />
+          <End Role="ChiTietTuLam_ThanhPhan" Type="Self.ChiTietTuLam_ThanhPhan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ThanhPhan">
+              <PropertyRef Name="MaTP" />
+            </Principal>
+            <Dependent Role="ChiTietTuLam_ThanhPhan">
+              <PropertyRef Name="MaTP" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DonHang_BanAn">
+          <End Role="BanAn" Type="Self.BanAn" Multiplicity="1" />
+          <End Role="DonHang" Type="Self.DonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BanAn">
+              <PropertyRef Name="SoBan" />
+            </Principal>
+            <Dependent Role="DonHang">
+              <PropertyRef Name="SoBan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DonHang_Buoc">
+          <End Role="BuocLamBanh" Type="Self.BuocLamBanh" Multiplicity="1" />
+          <End Role="DonHang" Type="Self.DonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BuocLamBanh">
+              <PropertyRef Name="MaBuoc" />
+            </Principal>
+            <Dependent Role="DonHang">
+              <PropertyRef Name="TrangThaiDon" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PizzaLamSan_Pizza">
+          <End Role="Pizza" Type="Self.Pizza" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PizzaLamSan" Type="Self.PizzaLamSan" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Pizza">
+              <PropertyRef Name="MaPizza" />
+            </Principal>
+            <Dependent Role="PizzaLamSan">
+              <PropertyRef Name="MaPizza" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PizzaTuLam_Pizza">
+          <End Role="Pizza" Type="Self.Pizza" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PizzaTuLam" Type="Self.PizzaTuLam" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Pizza">
+              <PropertyRef Name="MaPizza" />
+            </Principal>
+            <Dependent Role="PizzaTuLam">
+              <PropertyRef Name="MaPizza" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThanhToan_DonHang">
+          <End Role="DonHang" Type="Self.DonHang" Multiplicity="1" />
+          <End Role="ThanhToan" Type="Self.ThanhToan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonHang">
+              <PropertyRef Name="MaDonHang" />
+            </Principal>
+            <Dependent Role="ThanhToan">
+              <PropertyRef Name="MaDonHang" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TPPLS_PizzaLamSan">
+          <End Role="PizzaLamSan" Type="Self.PizzaLamSan" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ThanhPhanPizzaLamSan" Type="Self.ThanhPhanPizzaLamSan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PizzaLamSan">
+              <PropertyRef Name="MaPizza" />
+            </Principal>
+            <Dependent Role="ThanhPhanPizzaLamSan">
+              <PropertyRef Name="MaPizza" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TPPLS_ThanhPhan">
+          <End Role="ThanhPhan" Type="Self.ThanhPhan" Multiplicity="1" />
+          <End Role="ThanhPhanPizzaLamSan" Type="Self.ThanhPhanPizzaLamSan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ThanhPhan">
+              <PropertyRef Name="MaTP" />
+            </Principal>
+            <Dependent Role="ThanhPhanPizzaLamSan">
+              <PropertyRef Name="MaTP" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TTThe_Cong">
+          <End Role="CongThanhToan" Type="Self.CongThanhToan" Multiplicity="0..1" />
+          <End Role="ThanhToanThe" Type="Self.ThanhToanThe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CongThanhToan">
+              <PropertyRef Name="MaCong" />
+            </Principal>
+            <Dependent Role="ThanhToanThe">
+              <PropertyRef Name="MaCong" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TTThe_ThanhToan">
+          <End Role="ThanhToan" Type="Self.ThanhToan" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ThanhToanThe" Type="Self.ThanhToanThe" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ThanhToan">
+              <PropertyRef Name="MaThanhToan" />
+            </Principal>
+            <Dependent Role="ThanhToanThe">
+              <PropertyRef Name="MaThanhToan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TTTM_ThanhToan">
+          <End Role="ThanhToan" Type="Self.ThanhToan" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ThanhToanTienMat" Type="Self.ThanhToanTienMat" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ThanhToan">
+              <PropertyRef Name="MaThanhToan" />
+            </Principal>
+            <Dependent Role="ThanhToanTienMat">
+              <PropertyRef Name="MaThanhToan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PizzaDBModelStoreContainer">
+          <EntitySet Name="BanAn" EntityType="Self.BanAn" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BuocLamBanh" EntityType="Self.BuocLamBanh" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ChiTietDonHang" EntityType="Self.ChiTietDonHang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ChiTietTuLam_ThanhPhan" EntityType="Self.ChiTietTuLam_ThanhPhan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CongThanhToan" EntityType="Self.CongThanhToan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DonHang" EntityType="Self.DonHang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KichThuoc" EntityType="Self.KichThuoc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NuocUong" EntityType="Self.NuocUong" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pizza" EntityType="Self.Pizza" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PizzaLamSan" EntityType="Self.PizzaLamSan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PizzaTuLam" EntityType="Self.PizzaTuLam" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ThanhPhan" EntityType="Self.ThanhPhan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ThanhPhanPizzaLamSan" EntityType="Self.ThanhPhanPizzaLamSan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ThanhToan" EntityType="Self.ThanhToan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ThanhToanThe" EntityType="Self.ThanhToanThe" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ThanhToanTienMat" EntityType="Self.ThanhToanTienMat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VoBanh" EntityType="Self.VoBanh" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CTDH_DonHang" Association="Self.FK_CTDH_DonHang">
+            <End Role="DonHang" EntitySet="DonHang" />
+            <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTDH_KichThuoc" Association="Self.FK_CTDH_KichThuoc">
+            <End Role="KichThuoc" EntitySet="KichThuoc" />
+            <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTDH_NuocUong" Association="Self.FK_CTDH_NuocUong">
+            <End Role="NuocUong" EntitySet="NuocUong" />
+            <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTDH_Pizza" Association="Self.FK_CTDH_Pizza">
+            <End Role="Pizza" EntitySet="Pizza" />
+            <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTDH_VoBanh" Association="Self.FK_CTDH_VoBanh">
+            <End Role="VoBanh" EntitySet="VoBanh" />
+            <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTTL_ChiTiet" Association="Self.FK_CTTL_ChiTiet">
+            <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
+            <End Role="ChiTietTuLam_ThanhPhan" EntitySet="ChiTietTuLam_ThanhPhan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTTL_ThanhPhan" Association="Self.FK_CTTL_ThanhPhan">
+            <End Role="ThanhPhan" EntitySet="ThanhPhan" />
+            <End Role="ChiTietTuLam_ThanhPhan" EntitySet="ChiTietTuLam_ThanhPhan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DonHang_BanAn" Association="Self.FK_DonHang_BanAn">
+            <End Role="BanAn" EntitySet="BanAn" />
+            <End Role="DonHang" EntitySet="DonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DonHang_Buoc" Association="Self.FK_DonHang_Buoc">
+            <End Role="BuocLamBanh" EntitySet="BuocLamBanh" />
+            <End Role="DonHang" EntitySet="DonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PizzaLamSan_Pizza" Association="Self.FK_PizzaLamSan_Pizza">
+            <End Role="Pizza" EntitySet="Pizza" />
+            <End Role="PizzaLamSan" EntitySet="PizzaLamSan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PizzaTuLam_Pizza" Association="Self.FK_PizzaTuLam_Pizza">
+            <End Role="Pizza" EntitySet="Pizza" />
+            <End Role="PizzaTuLam" EntitySet="PizzaTuLam" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThanhToan_DonHang" Association="Self.FK_ThanhToan_DonHang">
+            <End Role="DonHang" EntitySet="DonHang" />
+            <End Role="ThanhToan" EntitySet="ThanhToan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TPPLS_PizzaLamSan" Association="Self.FK_TPPLS_PizzaLamSan">
+            <End Role="PizzaLamSan" EntitySet="PizzaLamSan" />
+            <End Role="ThanhPhanPizzaLamSan" EntitySet="ThanhPhanPizzaLamSan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TPPLS_ThanhPhan" Association="Self.FK_TPPLS_ThanhPhan">
+            <End Role="ThanhPhan" EntitySet="ThanhPhan" />
+            <End Role="ThanhPhanPizzaLamSan" EntitySet="ThanhPhanPizzaLamSan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TTThe_Cong" Association="Self.FK_TTThe_Cong">
+            <End Role="CongThanhToan" EntitySet="CongThanhToan" />
+            <End Role="ThanhToanThe" EntitySet="ThanhToanThe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TTThe_ThanhToan" Association="Self.FK_TTThe_ThanhToan">
+            <End Role="ThanhToan" EntitySet="ThanhToan" />
+            <End Role="ThanhToanThe" EntitySet="ThanhToanThe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TTTM_ThanhToan" Association="Self.FK_TTTM_ThanhToan">
+            <End Role="ThanhToan" EntitySet="ThanhToan" />
+            <End Role="ThanhToanTienMat" EntitySet="ThanhToanTienMat" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PizzaDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="BanAn">
+          <Key>
+            <PropertyRef Name="SoBan" />
+          </Key>
+          <Property Name="SoBan" Type="Int32" Nullable="false" />
+          <Property Name="TrangThaiBan" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DonHang" Relationship="Self.FK_DonHang_BanAn" FromRole="BanAn" ToRole="DonHang" />
+        </EntityType>
+        <EntityType Name="BuocLamBanh">
+          <Key>
+            <PropertyRef Name="MaBuoc" />
+          </Key>
+          <Property Name="MaBuoc" Type="Int32" Nullable="false" />
+          <Property Name="TenBuoc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ThuTu" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DonHang" Relationship="Self.FK_DonHang_Buoc" FromRole="BuocLamBanh" ToRole="DonHang" />
+        </EntityType>
+        <EntityType Name="ChiTietDonHang">
+          <Key>
+            <PropertyRef Name="MaChiTiet" />
+          </Key>
+          <Property Name="MaChiTiet" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaDonHang" Type="Int32" Nullable="false" />
+          <Property Name="MaPizza" Type="Int32" />
+          <Property Name="MaNuoc" Type="Int32" />
+          <Property Name="MaKichThuoc" Type="Int32" />
+          <Property Name="MaVoBanh" Type="Int32" />
+          <Property Name="SoLuong" Type="Int32" Nullable="false" />
+          <Property Name="DonGia" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="ThanhTien" Type="Decimal" Precision="29" Scale="0" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="DonHang" Relationship="Self.FK_CTDH_DonHang" FromRole="ChiTietDonHang" ToRole="DonHang" />
+          <NavigationProperty Name="KichThuoc" Relationship="Self.FK_CTDH_KichThuoc" FromRole="ChiTietDonHang" ToRole="KichThuoc" />
+          <NavigationProperty Name="NuocUong" Relationship="Self.FK_CTDH_NuocUong" FromRole="ChiTietDonHang" ToRole="NuocUong" />
+          <NavigationProperty Name="Pizza" Relationship="Self.FK_CTDH_Pizza" FromRole="ChiTietDonHang" ToRole="Pizza" />
+          <NavigationProperty Name="VoBanh" Relationship="Self.FK_CTDH_VoBanh" FromRole="ChiTietDonHang" ToRole="VoBanh" />
+          <NavigationProperty Name="ChiTietTuLam_ThanhPhan" Relationship="Self.FK_CTTL_ChiTiet" FromRole="ChiTietDonHang" ToRole="ChiTietTuLam_ThanhPhan" />
+        </EntityType>
+        <EntityType Name="ChiTietTuLam_ThanhPhan">
+          <Key>
+            <PropertyRef Name="MaChiTiet" />
+            <PropertyRef Name="MaTP" />
+          </Key>
+          <Property Name="MaChiTiet" Type="Int32" Nullable="false" />
+          <Property Name="MaTP" Type="Int32" Nullable="false" />
+          <Property Name="GiaTien" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <NavigationProperty Name="ChiTietDonHang" Relationship="Self.FK_CTTL_ChiTiet" FromRole="ChiTietTuLam_ThanhPhan" ToRole="ChiTietDonHang" />
+          <NavigationProperty Name="ThanhPhan" Relationship="Self.FK_CTTL_ThanhPhan" FromRole="ChiTietTuLam_ThanhPhan" ToRole="ThanhPhan" />
+        </EntityType>
+        <EntityType Name="CongThanhToan">
+          <Key>
+            <PropertyRef Name="MaCong" />
+          </Key>
+          <Property Name="MaCong" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenCong" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GatewayURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="APIKey" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ThanhToanThe" Relationship="Self.FK_TTThe_Cong" FromRole="CongThanhToan" ToRole="ThanhToanThe" />
+        </EntityType>
+        <EntityType Name="DonHang">
+          <Key>
+            <PropertyRef Name="MaDonHang" />
+          </Key>
+          <Property Name="MaDonHang" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SoBan" Type="Int32" Nullable="false" />
+          <Property Name="NgayTao" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TongTien" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="TrangThaiDon" Type="Int32" Nullable="false" />
+          <Property Name="TrangThaiThanhToan" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="BanAn" Relationship="Self.FK_DonHang_BanAn" FromRole="DonHang" ToRole="BanAn" />
+          <NavigationProperty Name="BuocLamBanh" Relationship="Self.FK_DonHang_Buoc" FromRole="DonHang" ToRole="BuocLamBanh" />
+          <NavigationProperty Name="ChiTietDonHang" Relationship="Self.FK_CTDH_DonHang" FromRole="DonHang" ToRole="ChiTietDonHang" />
+          <NavigationProperty Name="ThanhToan" Relationship="Self.FK_ThanhToan_DonHang" FromRole="DonHang" ToRole="ThanhToan" />
+        </EntityType>
+        <EntityType Name="KichThuoc">
+          <Key>
+            <PropertyRef Name="MaKichThuoc" />
+          </Key>
+          <Property Name="MaKichThuoc" Type="Int32" Nullable="false" />
+          <Property Name="TenKichThuoc" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="HeSoGia" Type="Decimal" Precision="4" Scale="2" Nullable="false" />
+          <NavigationProperty Name="ChiTietDonHang" Relationship="Self.FK_CTDH_KichThuoc" FromRole="KichThuoc" ToRole="ChiTietDonHang" />
+        </EntityType>
+        <EntityType Name="NuocUong">
+          <Key>
+            <PropertyRef Name="MaNuoc" />
+          </Key>
+          <Property Name="MaNuoc" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenNuoc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DonGia" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="SoLuongTon" Type="Int32" Nullable="false" />
+          <Property Name="HinhAnh" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ChiTietDonHang" Relationship="Self.FK_CTDH_NuocUong" FromRole="NuocUong" ToRole="ChiTietDonHang" />
+        </EntityType>
+        <EntityType Name="Pizza">
+          <Key>
+            <PropertyRef Name="MaPizza" />
+          </Key>
+          <Property Name="MaPizza" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenPizza" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LoaiPizza" Type="Int32" Nullable="false" />
+          <Property Name="DonGia" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="HinhAnh" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="TrangThai" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ChiTietDonHang" Relationship="Self.FK_CTDH_Pizza" FromRole="Pizza" ToRole="ChiTietDonHang" />
+          <NavigationProperty Name="PizzaLamSan" Relationship="Self.FK_PizzaLamSan_Pizza" FromRole="Pizza" ToRole="PizzaLamSan" />
+          <NavigationProperty Name="PizzaTuLam" Relationship="Self.FK_PizzaTuLam_Pizza" FromRole="Pizza" ToRole="PizzaTuLam" />
+        </EntityType>
+        <EntityType Name="PizzaLamSan">
+          <Key>
+            <PropertyRef Name="MaPizza" />
+          </Key>
+          <Property Name="MaPizza" Type="Int32" Nullable="false" />
+          <Property Name="MoTa" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Pizza" Relationship="Self.FK_PizzaLamSan_Pizza" FromRole="PizzaLamSan" ToRole="Pizza" />
+          <NavigationProperty Name="ThanhPhan" Relationship="Self.ThanhPhanPizzaLamSan" FromRole="PizzaLamSan" ToRole="ThanhPhan" />
+        </EntityType>
+        <EntityType Name="PizzaTuLam">
+          <Key>
+            <PropertyRef Name="MaPizza" />
+          </Key>
+          <Property Name="MaPizza" Type="Int32" Nullable="false" />
+          <Property Name="CoSotCaChua" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Pizza" Relationship="Self.FK_PizzaTuLam_Pizza" FromRole="PizzaTuLam" ToRole="Pizza" />
+        </EntityType>
+        <EntityType Name="ThanhPhan">
+          <Key>
+            <PropertyRef Name="MaTP" />
+          </Key>
+          <Property Name="MaTP" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenTP" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GiaTien" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="TrangThai" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ChiTietTuLam_ThanhPhan" Relationship="Self.FK_CTTL_ThanhPhan" FromRole="ThanhPhan" ToRole="ChiTietTuLam_ThanhPhan" />
+          <NavigationProperty Name="PizzaLamSan" Relationship="Self.ThanhPhanPizzaLamSan" FromRole="ThanhPhan" ToRole="PizzaLamSan" />
+        </EntityType>
+        <EntityType Name="ThanhToan">
+          <Key>
+            <PropertyRef Name="MaThanhToan" />
+          </Key>
+          <Property Name="MaThanhToan" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaDonHang" Type="Int32" Nullable="false" />
+          <Property Name="PhuongThuc" Type="Int32" Nullable="false" />
+          <Property Name="SoTien" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="NgayThanhToan" Type="DateTime" Precision="3" />
+          <Property Name="TrangThai" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="DonHang" Relationship="Self.FK_ThanhToan_DonHang" FromRole="ThanhToan" ToRole="DonHang" />
+          <NavigationProperty Name="ThanhToanThe" Relationship="Self.FK_TTThe_ThanhToan" FromRole="ThanhToan" ToRole="ThanhToanThe" />
+          <NavigationProperty Name="ThanhToanTienMat" Relationship="Self.FK_TTTM_ThanhToan" FromRole="ThanhToan" ToRole="ThanhToanTienMat" />
+        </EntityType>
+        <EntityType Name="ThanhToanThe">
+          <Key>
+            <PropertyRef Name="MaThanhToan" />
+          </Key>
+          <Property Name="MaThanhToan" Type="Int32" Nullable="false" />
+          <Property Name="MaCong" Type="Int32" />
+          <Property Name="SoThe" Type="String" MaxLength="20" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="TenChuThe" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NgayHetHan" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="MaGiaoDich" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="CongThanhToan" Relationship="Self.FK_TTThe_Cong" FromRole="ThanhToanThe" ToRole="CongThanhToan" />
+          <NavigationProperty Name="ThanhToan" Relationship="Self.FK_TTThe_ThanhToan" FromRole="ThanhToanThe" ToRole="ThanhToan" />
+        </EntityType>
+        <EntityType Name="ThanhToanTienMat">
+          <Key>
+            <PropertyRef Name="MaThanhToan" />
+          </Key>
+          <Property Name="MaThanhToan" Type="Int32" Nullable="false" />
+          <Property Name="TienKhachDua" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="TienThua" Type="Decimal" Precision="18" Scale="0" />
+          <NavigationProperty Name="ThanhToan" Relationship="Self.FK_TTTM_ThanhToan" FromRole="ThanhToanTienMat" ToRole="ThanhToan" />
+        </EntityType>
+        <EntityType Name="VoBanh">
+          <Key>
+            <PropertyRef Name="MaVoBanh" />
+          </Key>
+          <Property Name="MaVoBanh" Type="Int32" Nullable="false" />
+          <Property Name="TenVoBanh" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhuThu" Type="Decimal" Precision="18" Scale="0" Nullable="false" />
+          <NavigationProperty Name="ChiTietDonHang" Relationship="Self.FK_CTDH_VoBanh" FromRole="VoBanh" ToRole="ChiTietDonHang" />
+        </EntityType>
+        <Association Name="FK_DonHang_BanAn">
+          <End Role="BanAn" Type="Self.BanAn" Multiplicity="1" />
+          <End Role="DonHang" Type="Self.DonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BanAn">
+              <PropertyRef Name="SoBan" />
+            </Principal>
+            <Dependent Role="DonHang">
+              <PropertyRef Name="SoBan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DonHang_Buoc">
+          <End Role="BuocLamBanh" Type="Self.BuocLamBanh" Multiplicity="1" />
+          <End Role="DonHang" Type="Self.DonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BuocLamBanh">
+              <PropertyRef Name="MaBuoc" />
+            </Principal>
+            <Dependent Role="DonHang">
+              <PropertyRef Name="TrangThaiDon" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTDH_DonHang">
+          <End Role="DonHang" Type="Self.DonHang" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonHang">
+              <PropertyRef Name="MaDonHang" />
+            </Principal>
+            <Dependent Role="ChiTietDonHang">
+              <PropertyRef Name="MaDonHang" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTDH_KichThuoc">
+          <End Role="KichThuoc" Type="Self.KichThuoc" Multiplicity="0..1" />
+          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="KichThuoc">
+              <PropertyRef Name="MaKichThuoc" />
+            </Principal>
+            <Dependent Role="ChiTietDonHang">
+              <PropertyRef Name="MaKichThuoc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTDH_NuocUong">
+          <End Role="NuocUong" Type="Self.NuocUong" Multiplicity="0..1" />
+          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NuocUong">
+              <PropertyRef Name="MaNuoc" />
+            </Principal>
+            <Dependent Role="ChiTietDonHang">
+              <PropertyRef Name="MaNuoc" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTDH_Pizza">
+          <End Role="Pizza" Type="Self.Pizza" Multiplicity="0..1" />
+          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Pizza">
+              <PropertyRef Name="MaPizza" />
+            </Principal>
+            <Dependent Role="ChiTietDonHang">
+              <PropertyRef Name="MaPizza" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTDH_VoBanh">
+          <End Role="VoBanh" Type="Self.VoBanh" Multiplicity="0..1" />
+          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="VoBanh">
+              <PropertyRef Name="MaVoBanh" />
+            </Principal>
+            <Dependent Role="ChiTietDonHang">
+              <PropertyRef Name="MaVoBanh" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTTL_ChiTiet">
+          <End Role="ChiTietDonHang" Type="Self.ChiTietDonHang" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ChiTietTuLam_ThanhPhan" Type="Self.ChiTietTuLam_ThanhPhan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ChiTietDonHang">
+              <PropertyRef Name="MaChiTiet" />
+            </Principal>
+            <Dependent Role="ChiTietTuLam_ThanhPhan">
+              <PropertyRef Name="MaChiTiet" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CTTL_ThanhPhan">
+          <End Role="ThanhPhan" Type="Self.ThanhPhan" Multiplicity="1" />
+          <End Role="ChiTietTuLam_ThanhPhan" Type="Self.ChiTietTuLam_ThanhPhan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ThanhPhan">
+              <PropertyRef Name="MaTP" />
+            </Principal>
+            <Dependent Role="ChiTietTuLam_ThanhPhan">
+              <PropertyRef Name="MaTP" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TTThe_Cong">
+          <End Role="CongThanhToan" Type="Self.CongThanhToan" Multiplicity="0..1" />
+          <End Role="ThanhToanThe" Type="Self.ThanhToanThe" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CongThanhToan">
+              <PropertyRef Name="MaCong" />
+            </Principal>
+            <Dependent Role="ThanhToanThe">
+              <PropertyRef Name="MaCong" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ThanhToan_DonHang">
+          <End Role="DonHang" Type="Self.DonHang" Multiplicity="1" />
+          <End Role="ThanhToan" Type="Self.ThanhToan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DonHang">
+              <PropertyRef Name="MaDonHang" />
+            </Principal>
+            <Dependent Role="ThanhToan">
+              <PropertyRef Name="MaDonHang" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PizzaLamSan_Pizza">
+          <End Role="Pizza" Type="Self.Pizza" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PizzaLamSan" Type="Self.PizzaLamSan" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Pizza">
+              <PropertyRef Name="MaPizza" />
+            </Principal>
+            <Dependent Role="PizzaLamSan">
+              <PropertyRef Name="MaPizza" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PizzaTuLam_Pizza">
+          <End Role="Pizza" Type="Self.Pizza" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="PizzaTuLam" Type="Self.PizzaTuLam" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Pizza">
+              <PropertyRef Name="MaPizza" />
+            </Principal>
+            <Dependent Role="PizzaTuLam">
+              <PropertyRef Name="MaPizza" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TTThe_ThanhToan">
+          <End Role="ThanhToan" Type="Self.ThanhToan" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ThanhToanThe" Type="Self.ThanhToanThe" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ThanhToan">
+              <PropertyRef Name="MaThanhToan" />
+            </Principal>
+            <Dependent Role="ThanhToanThe">
+              <PropertyRef Name="MaThanhToan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TTTM_ThanhToan">
+          <End Role="ThanhToan" Type="Self.ThanhToan" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ThanhToanTienMat" Type="Self.ThanhToanTienMat" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="ThanhToan">
+              <PropertyRef Name="MaThanhToan" />
+            </Principal>
+            <Dependent Role="ThanhToanTienMat">
+              <PropertyRef Name="MaThanhToan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ThanhPhanPizzaLamSan">
+          <End Role="PizzaLamSan" Type="Self.PizzaLamSan" Multiplicity="*" />
+          <End Role="ThanhPhan" Type="Self.ThanhPhan" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="PizzaDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="BanAn" EntityType="Self.BanAn" />
+          <EntitySet Name="BuocLamBanh" EntityType="Self.BuocLamBanh" />
+          <EntitySet Name="ChiTietDonHang" EntityType="Self.ChiTietDonHang" />
+          <EntitySet Name="ChiTietTuLam_ThanhPhan" EntityType="Self.ChiTietTuLam_ThanhPhan" />
+          <EntitySet Name="CongThanhToan" EntityType="Self.CongThanhToan" />
+          <EntitySet Name="DonHang" EntityType="Self.DonHang" />
+          <EntitySet Name="KichThuoc" EntityType="Self.KichThuoc" />
+          <EntitySet Name="NuocUong" EntityType="Self.NuocUong" />
+          <EntitySet Name="Pizza" EntityType="Self.Pizza" />
+          <EntitySet Name="PizzaLamSan" EntityType="Self.PizzaLamSan" />
+          <EntitySet Name="PizzaTuLam" EntityType="Self.PizzaTuLam" />
+          <EntitySet Name="ThanhPhan" EntityType="Self.ThanhPhan" />
+          <EntitySet Name="ThanhToan" EntityType="Self.ThanhToan" />
+          <EntitySet Name="ThanhToanThe" EntityType="Self.ThanhToanThe" />
+          <EntitySet Name="ThanhToanTienMat" EntityType="Self.ThanhToanTienMat" />
+          <EntitySet Name="VoBanh" EntityType="Self.VoBanh" />
+          <AssociationSet Name="FK_DonHang_BanAn" Association="Self.FK_DonHang_BanAn">
+            <End Role="BanAn" EntitySet="BanAn" />
+            <End Role="DonHang" EntitySet="DonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DonHang_Buoc" Association="Self.FK_DonHang_Buoc">
+            <End Role="BuocLamBanh" EntitySet="BuocLamBanh" />
+            <End Role="DonHang" EntitySet="DonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTDH_DonHang" Association="Self.FK_CTDH_DonHang">
+            <End Role="DonHang" EntitySet="DonHang" />
+            <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTDH_KichThuoc" Association="Self.FK_CTDH_KichThuoc">
+            <End Role="KichThuoc" EntitySet="KichThuoc" />
+            <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTDH_NuocUong" Association="Self.FK_CTDH_NuocUong">
+            <End Role="NuocUong" EntitySet="NuocUong" />
+            <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTDH_Pizza" Association="Self.FK_CTDH_Pizza">
+            <End Role="Pizza" EntitySet="Pizza" />
+            <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTDH_VoBanh" Association="Self.FK_CTDH_VoBanh">
+            <End Role="VoBanh" EntitySet="VoBanh" />
+            <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTTL_ChiTiet" Association="Self.FK_CTTL_ChiTiet">
+            <End Role="ChiTietDonHang" EntitySet="ChiTietDonHang" />
+            <End Role="ChiTietTuLam_ThanhPhan" EntitySet="ChiTietTuLam_ThanhPhan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CTTL_ThanhPhan" Association="Self.FK_CTTL_ThanhPhan">
+            <End Role="ThanhPhan" EntitySet="ThanhPhan" />
+            <End Role="ChiTietTuLam_ThanhPhan" EntitySet="ChiTietTuLam_ThanhPhan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TTThe_Cong" Association="Self.FK_TTThe_Cong">
+            <End Role="CongThanhToan" EntitySet="CongThanhToan" />
+            <End Role="ThanhToanThe" EntitySet="ThanhToanThe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ThanhToan_DonHang" Association="Self.FK_ThanhToan_DonHang">
+            <End Role="DonHang" EntitySet="DonHang" />
+            <End Role="ThanhToan" EntitySet="ThanhToan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PizzaLamSan_Pizza" Association="Self.FK_PizzaLamSan_Pizza">
+            <End Role="Pizza" EntitySet="Pizza" />
+            <End Role="PizzaLamSan" EntitySet="PizzaLamSan" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PizzaTuLam_Pizza" Association="Self.FK_PizzaTuLam_Pizza">
+            <End Role="Pizza" EntitySet="Pizza" />
+            <End Role="PizzaTuLam" EntitySet="PizzaTuLam" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TTThe_ThanhToan" Association="Self.FK_TTThe_ThanhToan">
+            <End Role="ThanhToan" EntitySet="ThanhToan" />
+            <End Role="ThanhToanThe" EntitySet="ThanhToanThe" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TTTM_ThanhToan" Association="Self.FK_TTTM_ThanhToan">
+            <End Role="ThanhToan" EntitySet="ThanhToan" />
+            <End Role="ThanhToanTienMat" EntitySet="ThanhToanTienMat" />
+          </AssociationSet>
+          <AssociationSet Name="ThanhPhanPizzaLamSan" Association="Self.ThanhPhanPizzaLamSan">
+            <End Role="PizzaLamSan" EntitySet="PizzaLamSan" />
+            <End Role="ThanhPhan" EntitySet="ThanhPhan" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PizzaDBModelStoreContainer" CdmEntityContainer="PizzaDBEntities">
+          <EntitySetMapping Name="BanAn">
+            <EntityTypeMapping TypeName="PizzaDBModel.BanAn">
+              <MappingFragment StoreEntitySet="BanAn">
+                <ScalarProperty Name="SoBan" ColumnName="SoBan" />
+                <ScalarProperty Name="TrangThaiBan" ColumnName="TrangThaiBan" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BuocLamBanh">
+            <EntityTypeMapping TypeName="PizzaDBModel.BuocLamBanh">
+              <MappingFragment StoreEntitySet="BuocLamBanh">
+                <ScalarProperty Name="MaBuoc" ColumnName="MaBuoc" />
+                <ScalarProperty Name="TenBuoc" ColumnName="TenBuoc" />
+                <ScalarProperty Name="ThuTu" ColumnName="ThuTu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ChiTietDonHang">
+            <EntityTypeMapping TypeName="PizzaDBModel.ChiTietDonHang">
+              <MappingFragment StoreEntitySet="ChiTietDonHang">
+                <ScalarProperty Name="MaChiTiet" ColumnName="MaChiTiet" />
+                <ScalarProperty Name="MaDonHang" ColumnName="MaDonHang" />
+                <ScalarProperty Name="MaPizza" ColumnName="MaPizza" />
+                <ScalarProperty Name="MaNuoc" ColumnName="MaNuoc" />
+                <ScalarProperty Name="MaKichThuoc" ColumnName="MaKichThuoc" />
+                <ScalarProperty Name="MaVoBanh" ColumnName="MaVoBanh" />
+                <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
+                <ScalarProperty Name="ThanhTien" ColumnName="ThanhTien" />
+                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ChiTietTuLam_ThanhPhan">
+            <EntityTypeMapping TypeName="PizzaDBModel.ChiTietTuLam_ThanhPhan">
+              <MappingFragment StoreEntitySet="ChiTietTuLam_ThanhPhan">
+                <ScalarProperty Name="MaChiTiet" ColumnName="MaChiTiet" />
+                <ScalarProperty Name="MaTP" ColumnName="MaTP" />
+                <ScalarProperty Name="GiaTien" ColumnName="GiaTien" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CongThanhToan">
+            <EntityTypeMapping TypeName="PizzaDBModel.CongThanhToan">
+              <MappingFragment StoreEntitySet="CongThanhToan">
+                <ScalarProperty Name="MaCong" ColumnName="MaCong" />
+                <ScalarProperty Name="TenCong" ColumnName="TenCong" />
+                <ScalarProperty Name="GatewayURL" ColumnName="GatewayURL" />
+                <ScalarProperty Name="APIKey" ColumnName="APIKey" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DonHang">
+            <EntityTypeMapping TypeName="PizzaDBModel.DonHang">
+              <MappingFragment StoreEntitySet="DonHang">
+                <ScalarProperty Name="MaDonHang" ColumnName="MaDonHang" />
+                <ScalarProperty Name="SoBan" ColumnName="SoBan" />
+                <ScalarProperty Name="NgayTao" ColumnName="NgayTao" />
+                <ScalarProperty Name="TongTien" ColumnName="TongTien" />
+                <ScalarProperty Name="TrangThaiDon" ColumnName="TrangThaiDon" />
+                <ScalarProperty Name="TrangThaiThanhToan" ColumnName="TrangThaiThanhToan" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KichThuoc">
+            <EntityTypeMapping TypeName="PizzaDBModel.KichThuoc">
+              <MappingFragment StoreEntitySet="KichThuoc">
+                <ScalarProperty Name="MaKichThuoc" ColumnName="MaKichThuoc" />
+                <ScalarProperty Name="TenKichThuoc" ColumnName="TenKichThuoc" />
+                <ScalarProperty Name="HeSoGia" ColumnName="HeSoGia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="NuocUong">
+            <EntityTypeMapping TypeName="PizzaDBModel.NuocUong">
+              <MappingFragment StoreEntitySet="NuocUong">
+                <ScalarProperty Name="MaNuoc" ColumnName="MaNuoc" />
+                <ScalarProperty Name="TenNuoc" ColumnName="TenNuoc" />
+                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
+                <ScalarProperty Name="SoLuongTon" ColumnName="SoLuongTon" />
+                <ScalarProperty Name="HinhAnh" ColumnName="HinhAnh" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pizza">
+            <EntityTypeMapping TypeName="PizzaDBModel.Pizza">
+              <MappingFragment StoreEntitySet="Pizza">
+                <ScalarProperty Name="MaPizza" ColumnName="MaPizza" />
+                <ScalarProperty Name="TenPizza" ColumnName="TenPizza" />
+                <ScalarProperty Name="LoaiPizza" ColumnName="LoaiPizza" />
+                <ScalarProperty Name="DonGia" ColumnName="DonGia" />
+                <ScalarProperty Name="HinhAnh" ColumnName="HinhAnh" />
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PizzaLamSan">
+            <EntityTypeMapping TypeName="PizzaDBModel.PizzaLamSan">
+              <MappingFragment StoreEntitySet="PizzaLamSan">
+                <ScalarProperty Name="MaPizza" ColumnName="MaPizza" />
+                <ScalarProperty Name="MoTa" ColumnName="MoTa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PizzaTuLam">
+            <EntityTypeMapping TypeName="PizzaDBModel.PizzaTuLam">
+              <MappingFragment StoreEntitySet="PizzaTuLam">
+                <ScalarProperty Name="MaPizza" ColumnName="MaPizza" />
+                <ScalarProperty Name="CoSotCaChua" ColumnName="CoSotCaChua" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ThanhPhan">
+            <EntityTypeMapping TypeName="PizzaDBModel.ThanhPhan">
+              <MappingFragment StoreEntitySet="ThanhPhan">
+                <ScalarProperty Name="MaTP" ColumnName="MaTP" />
+                <ScalarProperty Name="TenTP" ColumnName="TenTP" />
+                <ScalarProperty Name="GiaTien" ColumnName="GiaTien" />
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ThanhToan">
+            <EntityTypeMapping TypeName="PizzaDBModel.ThanhToan">
+              <MappingFragment StoreEntitySet="ThanhToan">
+                <ScalarProperty Name="MaThanhToan" ColumnName="MaThanhToan" />
+                <ScalarProperty Name="MaDonHang" ColumnName="MaDonHang" />
+                <ScalarProperty Name="PhuongThuc" ColumnName="PhuongThuc" />
+                <ScalarProperty Name="SoTien" ColumnName="SoTien" />
+                <ScalarProperty Name="NgayThanhToan" ColumnName="NgayThanhToan" />
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ThanhToanThe">
+            <EntityTypeMapping TypeName="PizzaDBModel.ThanhToanThe">
+              <MappingFragment StoreEntitySet="ThanhToanThe">
+                <ScalarProperty Name="MaThanhToan" ColumnName="MaThanhToan" />
+                <ScalarProperty Name="MaCong" ColumnName="MaCong" />
+                <ScalarProperty Name="SoThe" ColumnName="SoThe" />
+                <ScalarProperty Name="TenChuThe" ColumnName="TenChuThe" />
+                <ScalarProperty Name="NgayHetHan" ColumnName="NgayHetHan" />
+                <ScalarProperty Name="MaGiaoDich" ColumnName="MaGiaoDich" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ThanhToanTienMat">
+            <EntityTypeMapping TypeName="PizzaDBModel.ThanhToanTienMat">
+              <MappingFragment StoreEntitySet="ThanhToanTienMat">
+                <ScalarProperty Name="MaThanhToan" ColumnName="MaThanhToan" />
+                <ScalarProperty Name="TienKhachDua" ColumnName="TienKhachDua" />
+                <ScalarProperty Name="TienThua" ColumnName="TienThua" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VoBanh">
+            <EntityTypeMapping TypeName="PizzaDBModel.VoBanh">
+              <MappingFragment StoreEntitySet="VoBanh">
+                <ScalarProperty Name="MaVoBanh" ColumnName="MaVoBanh" />
+                <ScalarProperty Name="TenVoBanh" ColumnName="TenVoBanh" />
+                <ScalarProperty Name="PhuThu" ColumnName="PhuThu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ThanhPhanPizzaLamSan" TypeName="PizzaDBModel.ThanhPhanPizzaLamSan" StoreEntitySet="ThanhPhanPizzaLamSan">
+            <EndProperty Name="PizzaLamSan">
+              <ScalarProperty Name="MaPizza" ColumnName="MaPizza" />
+            </EndProperty>
+            <EndProperty Name="ThanhPhan">
+              <ScalarProperty Name="MaTP" ColumnName="MaTP" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
